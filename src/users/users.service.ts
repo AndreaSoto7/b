@@ -18,11 +18,17 @@ export class UsersService {
       email: email.toLowerCase(),
       password,
       fullName,
-      role: UserRole.CLIENTE,
+      role: UserRole.USUARIO,
     });
     return this.repository.save(user);
   }
   getUserById(id: number): Promise<User | null> {
     return this.repository.findOne({ where: { id } });
+  }
+
+  async updateProfile(id: number, fullName: string): Promise<User> {
+    const user = await this.repository.findOneOrFail({ where: { id } });
+    user.fullName = fullName;
+    return this.repository.save(user);
   }
 }

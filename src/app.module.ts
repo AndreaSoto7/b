@@ -5,10 +5,11 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
-import { PeliculasModule } from './peliculas/peliculas.module';
-import { SalasModule } from './salas/salas.module';
-import { FuncionesModule } from './funciones/funciones.module';
-import { ReservasModule } from './reservas/reservas.module';
+import { GruposModule } from './grupos/grupos.module';
+import { PartidosModule } from './partidos/partidos.module';
+import { PronosticosModule } from './pronosticos/pronosticos.module';
+import { DashboardModule } from './dashboard/dashboard.module';
+import { SincronizacionModule } from './sincronizacion/sincronizacion.module';
 
 @Module({
   imports: [
@@ -27,10 +28,11 @@ import { ReservasModule } from './reservas/reservas.module';
     }),
     AuthModule,
     UsersModule,
-    PeliculasModule,
-    SalasModule,
-    FuncionesModule,
-    ReservasModule,
+    GruposModule,
+    PartidosModule,
+    PronosticosModule,
+    DashboardModule,
+    SincronizacionModule,
   ],
   controllers: [AppController],
   providers: [AppService],

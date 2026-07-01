@@ -1,8 +1,10 @@
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
-import { Reserva } from '../../reservas/entities/reserva.entity';
+import { GrupoMiembro } from '../../grupos/entities/grupo-miembro.entity';
+import { Grupo } from '../../grupos/entities/grupo.entity';
+import { Pronostico } from '../../pronosticos/entities/pronostico.entity';
 
 export enum UserRole {
-  CLIENTE = 'cliente',
+  USUARIO = 'usuario',
   ADMIN = 'admin',
 }
 
@@ -17,9 +19,15 @@ export class User {
   @Column()
   password: string;
 
-  @Column({ type: 'enum', enum: UserRole, default: UserRole.CLIENTE })
+  @Column({ type: 'enum', enum: UserRole, default: UserRole.USUARIO })
   role: UserRole;
 
-  @OneToMany(() => Reserva, (reserva) => reserva.usuario)
-  reservas: Reserva[];
+  @OneToMany(() => Grupo, (grupo) => grupo.creador)
+  gruposCreados: Grupo[];
+
+  @OneToMany(() => GrupoMiembro, (miembro) => miembro.usuario)
+  membresias: GrupoMiembro[];
+
+  @OneToMany(() => Pronostico, (pronostico) => pronostico.usuario)
+  pronosticos: Pronostico[];
 }

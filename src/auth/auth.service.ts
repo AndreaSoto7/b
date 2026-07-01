@@ -66,4 +66,17 @@ export class AuthService {
       role: user.role,
     };
   }
+
+  async updateUserProfile(
+    userId: number,
+    fullName: string,
+  ): Promise<UserInfoDto> {
+    const user = await this.usersService.updateProfile(userId, fullName);
+    return {
+      id: user.id,
+      email: user.email,
+      fullName: user.fullName,
+      role: user.role,
+    };
+  }
 }
