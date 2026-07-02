@@ -66,6 +66,16 @@ export class GruposService {
     });
   }
 
+  async findOne(usuarioId: number, grupoId: number): Promise<Grupo> {
+    await this.ensureMember(usuarioId, grupoId);
+    const grupo = await this.gruposRepository.findOne({
+      where: { id: grupoId },
+      relations: { creador: true },
+    });
+    if (!grupo) throw new NotFoundException('Grupo no encontrado');
+    return grupo;
+  }
+
   async getInvitationCode(usuarioId: number, grupoId: number) {
     const grupo = await this.gruposRepository.findOne({
       where: { id: grupoId },
@@ -100,7 +110,10 @@ export class GruposService {
       where: { estado: PartidoEstado.FINALIZADO },
     });
     const pronosticos = await this.pronosticosRepository.find({
-      where: miembros.map((miembro) => ({ usuario: { id: miembro.usuario.id } })),
+      where: miembros.map((miembro) => ({
+        usuario: { id: miembro.usuario.id },
+        grupo: { id: grupoId },
+      })),
       relations: { usuario: true, partido: true },
     });
     const partidosFinalizadosIds = new Set(

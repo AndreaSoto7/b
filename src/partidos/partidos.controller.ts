@@ -14,8 +14,8 @@ import { Roles } from '../auth/roles.decorator';
 import { RolesGuard } from '../auth/roles.guard';
 import { UserRole } from '../users/entities/User';
 import { CreatePartidoDto } from './dto/create-partido.dto';
+import { UpdateResultadoDto } from './dto/update-resultado.dto';
 import { UpdatePartidoDto } from './dto/update-partido.dto';
-import { PartidoEstado } from './entities/partido.entity';
 import { PartidosService } from './partidos.service';
 
 @Controller('partidos')
@@ -26,9 +26,14 @@ export class PartidosController {
   findAll(
     @Query('fase') fase?: string,
     @Query('fecha') fecha?: string,
-    @Query('estado') estado?: PartidoEstado,
+    @Query('estado') estado?: string,
   ) {
     return this.service.findAll({ fase, fecha, estado });
+  }
+
+  @Get('proximos')
+  findUpcoming() {
+    return this.service.findUpcoming();
   }
 
   @Get(':id')
@@ -48,5 +53,15 @@ export class PartidosController {
   @Roles(UserRole.ADMIN)
   update(@Param('id', ParseIntPipe) id: number, @Body() dto: UpdatePartidoDto) {
     return this.service.update(id, dto);
+  }
+
+  @Patch(':id/resultado')
+  @UseGuards(AuthGuard, RolesGuard)
+  @Roles(UserRole.ADMIN)
+  updateResult(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() dto: UpdateResultadoDto,
+  ) {
+    return this.service.updateResult(id, dto);
   }
 }
